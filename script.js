@@ -1,7 +1,5 @@
 // TO DO:
 
-// - query openWeather API, find correct syntax, traverse JSON response for:
-// Icon image (visual representation of weather conditions)
 // UV index
 
 // - append results
@@ -16,30 +14,21 @@ $(document).ready(function () {
 
   var openWeatherKey = "192f20e20e9ac8e9e102a10e908ac702";
 
-  // jQuery to target search form
   $("#searchButton").on("click", function () {
+    console.log("clicked");
     var searchQuery = $("#searchForm").val();
     var urlSearchQuery = spaceToPlusParser(searchQuery); // can this just be the argument to the ajax call?
-    // buttonMaker(searchQuery);
-    // more args later
     openWeatherCaller(urlSearchQuery, searchQuery)
-    // throw arguments later
-    // textAppender();
   })
 
   // jQuery to target button text
   $(".searchHistory").on("click", function () {
+    console.log("clicked");
     targetId = event.target.id;
     var searchQuery = $(targetId).text(); // parse this for URL
+    console.log(searchQuery);
   })
 
-  // redesign for getting current date, including day, month
-  function getDate() {
-    var date = parseInt(moment().format('MMMM Do YYYY'));
-    return date;
-  }
-
-  // redesign for openWeather API
   // figure out args
   function openWeatherCaller(cityQueryURL, cityQuery) {
     countryCode = "us"
@@ -60,7 +49,6 @@ $(document).ready(function () {
       url: fiveDayQueryURL,
       method: "GET",
       success: function (response) {
-        // console.log(response);
         currentWeatherGetter(response, cityQuery);
         fiveDayMaker(response);
         buttonMaker(cityQuery);
@@ -74,7 +62,6 @@ $(document).ready(function () {
   function currentWeatherGetter(response, cityQuery) {
     var iconURL = 
     "http://openweathermap.org/img/wn/" + response.list[0].weather[0].icon + "@2x.png"
-    // NEED ICON!
     // NEED UV
     $("#locationDate").text(cityQuery + ", " + dateParser(response.list[0].dt_txt));
     $("#locationDate").append("<img src=" +  iconURL + " />")
@@ -82,11 +69,11 @@ $(document).ready(function () {
     $("#humidity").text("Humidity: " + response.list[0].main.humidity);
     $("#windSpeed").text("Wind Speed: " + response.list[0].wind.speed);
     $("#UV").text("UV Index: ");
-    console.log(response.list[0].dt_txt); // date
-    console.log(response.list[0].weather[0].icon); // weather icon
-    console.log(response.list[0].main.temp); // temp
-    console.log(response.list[0].main.humidity); // humidity
-    console.log(response.list[0].wind.speed); // wind speed
+    // console.log(response.list[0].dt_txt); // date
+    // console.log(response.list[0].weather[0].icon); // weather icon
+    // console.log(response.list[0].main.temp); // temp
+    // console.log(response.list[0].main.humidity); // humidity
+    // console.log(response.list[0].wind.speed); // wind speed
   }
 
   function fiveDayMaker(response) {
@@ -101,9 +88,6 @@ $(document).ready(function () {
       // console.log(response.list[0].wind.speed); // wind speed
     }
   }
-
-  // test call
-  // openWeatherCaller("london");
 
   // redesign
   function storage(day) {
@@ -122,10 +106,8 @@ $(document).ready(function () {
     var forecastCardInner = $("<div></div>")
     .addClass("card-body"); 
     forecastCardInner.append([
-      // '<img src="theImg.png" />'
       $("<p></p>").text(dateParser(object.dt_txt)),
       $("<img src=" +  iconURL + " />"),
-      // $("<p></p>").text(object.weather[0].icon),
       $("<p></p>").text(object.main.temp),
       $("<p></p>").text(object.main.humidity)
     ])
